@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">FoodNote</string>
+    <string name="tab_ice_box">冰箱</string>
+    <string name="tab_dry_box">干货柜</string>
+    <string name="tab_seasoning_box">调料盒</string>
+    <string name="tab_normal_zone">常温区</string>
+</resources>
