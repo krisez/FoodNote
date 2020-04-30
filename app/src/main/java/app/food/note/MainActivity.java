@@ -13,6 +13,7 @@ import com.qmuiteam.qmui.widget.tab.QMUITabBuilder;
 import com.qmuiteam.qmui.widget.tab.QMUITabIndicator;
 import com.qmuiteam.qmui.widget.tab.QMUITabSegment;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,10 +21,13 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import app.food.note.ui.main.SectionsPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
+
+    private QMUITopBar mTopBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +63,19 @@ public class MainActivity extends AppCompatActivity {
         });
         QMUIStatusBarHelper.translucent(this);
         QMUIStatusBarHelper.setStatusBarLightMode(this);
-        QMUITopBar topBar = findViewById(R.id.topbar);
-        topBar.setTitle(R.string.app_name);
+        mTopBar = findViewById(R.id.topbar);
+        mTopBar.setTitle(R.string.app_name);
+        setupNotify();
+    }
+
+    //过期时间提醒
+    private void setupNotify() {
+        ConstraintLayout layout = (ConstraintLayout) View.inflate(this,R.layout.view_notify_time,null);
+        mTopBar.addRightView(layout,R.id.topbar_right_view,mTopBar.generateTopBarImageButtonLayoutParams());
+        ImageView notify = layout.findViewById(R.id.notify_time);
+        ImageView redPoint = layout.findViewById(R.id.notify_point);
+        notify.setOnClickListener(v->{
+            redPoint.setVisibility(View.GONE);
+        });
     }
 }
