@@ -13,26 +13,26 @@ import java.util.List;
 import app.food.note.FoodBean;
 import app.food.note.Utils;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class RxDbManager {
     private BriteDatabase db;
-    private Context mContext;
 
-    private RxDbManager(Context context) {
+    private RxDbManager() {
         db = DbUtils.getInstance();
-        this.mContext = context;
     }
 
-    public static RxDbManager getInstance(Context context) {
-        return new RxDbManager(context);
+    public static RxDbManager getInstance() {
+        return new RxDbManager();
     }
 
     //服务器返回有新的消息
     //自己发送的消息
-    public Observable<Boolean> insertMsg(final FoodBean food) {
+    public Observable<Boolean> insert(final FoodBean food) {
         return Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             ContentValues values = new ContentValues();
             values.put("name", food.name);
@@ -47,9 +47,9 @@ public class RxDbManager {
     }
 
     //查询语句
-    public Observable<List<FoodBean>> queryMsg(String zone) {
-        return Observable.create(emitter -> {
-            Cursor cursor = db.query("select * from " + DBHelper.TABLE_NAME + " where area =" + zone);
+    public Observable<List<FoodBean>> query(String zone) {
+        return Observable.create((ObservableOnSubscribe<List<FoodBean>>) emitter -> {
+            Cursor cursor = db.query("select * from " + DBHelper.TABLE_NAME + " where area=\"" + zone + "\"");
             List<FoodBean> list = new ArrayList<>();
             while (cursor.moveToNext()) {
                 int _id = cursor.getInt(cursor.getColumnIndex("_id"));
@@ -62,7 +62,7 @@ public class RxDbManager {
                 list.add(new FoodBean(_id, name, period, area, photo, createTime, updateTime));
             }
             emitter.onNext(list);
-        });
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     //删除消息记录，服务器不做操作
@@ -78,11 +78,11 @@ public class RxDbManager {
     }
 
     //清空数据库
-    public void clearMsg() {
+    public void clear() {
         db.execute("delete from " + DBHelper.TABLE_NAME + ";");
     }
 
-    public Observable<Boolean> updateMsg(FoodBean bean) {
+    public Observable<Boolean> update(FoodBean bean) {
         return Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
             ContentValues values = new ContentValues();
             values.put("name", bean.name);

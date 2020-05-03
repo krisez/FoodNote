@@ -1,5 +1,6 @@
 package app.food.note;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -75,7 +76,11 @@ public class MainActivity extends AppCompatActivity {
         ImageView notify = layout.findViewById(R.id.notify_time);
         ImageView redPoint = layout.findViewById(R.id.notify_point);
         notify.setOnClickListener(v->{
+            startActivity(new Intent(this,WillPeriodActivity.class));
             redPoint.setVisibility(View.GONE);
+        });
+        layout.findViewById(R.id.notify_add).setOnClickListener(v->{
+            startActivity(new Intent(this,FoodDetailActivity.class));
         });
     }
 }

@@ -24,7 +24,7 @@ public class DbUtils {
                 if (db == null) {
                     SqlBrite sqlBrite = new SqlBrite.Builder().build();
                     SupportSQLiteOpenHelper.Configuration configuration = SupportSQLiteOpenHelper.Configuration.builder(context)
-                            .name(DBHelper.TABLE_NAME)
+                            .name("food.db")
                             .callback(new DBHelper())
                             .build();
                     SupportSQLiteOpenHelper.Factory factory = new FrameworkSQLiteOpenHelperFactory();
