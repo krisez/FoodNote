@@ -19,9 +19,9 @@ import com.qmuiteam.qmui.widget.dialog.QMUIBottomSheet;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
-import com.zhihu.matisse.filter.Filter;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -59,7 +59,7 @@ public class FoodDetailActivity extends AppCompatActivity {
         if (mFoodBean != null) {
             topBar.setTitle("详情");
             name.setText(mFoodBean.name);
-            period.setText(mFoodBean.period+"");
+            period.setText(mFoodBean.period + "");
             note.setText(mFoodBean.note);
             if (!mFoodBean.photo.isEmpty()) {
                 Glide.with(this).load(mFoodBean.photo).into(mPhoto);
@@ -119,15 +119,22 @@ public class FoodDetailActivity extends AppCompatActivity {
                     setResult(RESULT_OK, new Intent().putExtra("area", bean.area));
                     finish();
                 }
-            },throwable -> Toast.makeText(this, "增加/修改失败！", Toast.LENGTH_SHORT).show());
+            }, throwable -> Toast.makeText(this, "增加/修改失败！", Toast.LENGTH_SHORT).show());
         });
 
         mPhoto.setOnClickListener(v -> {
+            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+            List<String> list = new ArrayList<>();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 200);
-                } else {
+                for (String permission : permissions) {
+                    if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+                        list.add(permission);
+                    }
+                }
+                if (list.isEmpty()) {
                     matisse();
+                } else {
+                    requestPermissions(list.toArray(new String[0]), 200);
                 }
             }
         });
@@ -164,10 +171,18 @@ public class FoodDetailActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 200) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                matisse();
-            } else {
+            int j = 0;
+            for (int grantResult : grantResults) {
+                if (grantResult == PackageManager.PERMISSION_GRANTED) {
+                    j++;
+                } else {
+                    break;
+                }
+            }
+            if (j < grantResults.length) {
                 Toast.makeText(this, "授权失败！", Toast.LENGTH_SHORT).show();
+            } else {
+                matisse();
             }
         }
     }
