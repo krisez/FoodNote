@@ -136,6 +136,8 @@ public class FoodDetailActivity extends AppCompatActivity {
                 } else {
                     requestPermissions(list.toArray(new String[0]), 200);
                 }
+            }else{
+                matisse();
             }
         });
     }
