@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.squareup.sqlbrite3.BriteDatabase;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class RxDbManager {
             values.put("photo", food.photo);
             values.put("createTime", Utils.getTime());
             values.put("updateTime", Utils.getTime());
+            values.put("note", food.note);
             db.insert(DBHelper.TABLE_NAME, SQLiteDatabase.CONFLICT_REPLACE, values);
             e.onNext(true);
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
@@ -49,24 +51,25 @@ public class RxDbManager {
     //查询语句
     public Observable<List<FoodBean>> query(String zone) {
         return Observable.create((ObservableOnSubscribe<List<FoodBean>>) emitter -> {
-            Cursor cursor = db.query("select * from " + DBHelper.TABLE_NAME + " where area=\"" + zone + "\"");
+            Cursor cursor = db.query("select * from " + DBHelper.TABLE_NAME + " where area=\"" + zone + "\" order by updateTime desc");
             List<FoodBean> list = new ArrayList<>();
             while (cursor.moveToNext()) {
                 int _id = cursor.getInt(cursor.getColumnIndex("_id"));
                 String name = cursor.getString(cursor.getColumnIndex("name"));
-                String period = cursor.getString(cursor.getColumnIndex("period"));
+                int period = cursor.getInt(cursor.getColumnIndex("period"));
                 String area = cursor.getString(cursor.getColumnIndex("area"));
                 String photo = cursor.getString(cursor.getColumnIndex("photo"));
                 String createTime = cursor.getString(cursor.getColumnIndex("createTime"));
                 String updateTime = cursor.getString(cursor.getColumnIndex("updateTime"));
-                list.add(new FoodBean(_id, name, period, area, photo, createTime, updateTime));
+                String note = cursor.getString(cursor.getColumnIndex("note"));
+                list.add(new FoodBean(_id, name, period, photo, area, createTime, updateTime, note));
             }
             emitter.onNext(list);
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     //删除消息记录，服务器不做操作
-    public void deleteMsg(ArrayList<Integer> _id) {
+    public void delete(ArrayList<Integer> _id) {
         BriteDatabase.Transaction transaction = db.newTransaction();
         try {
             for (int i = 0; i < _id.size(); i++) {
@@ -90,8 +93,30 @@ public class RxDbManager {
             values.put("area", bean.area);
             values.put("photo", bean.photo);
             values.put("updateTime", Utils.getTime());
+            values.put("note", bean.note);
             db.update(DBHelper.TABLE_NAME, SQLiteDatabase.CONFLICT_REPLACE, values, "_id=?", bean.id + "");
             emitter.onNext(true);
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<ArrayList<FoodBean>> queryPeriod() {
+        return Observable.create((ObservableOnSubscribe<ArrayList<FoodBean>>) emitter -> {
+            Cursor cursor = db.query("select * from " + DBHelper.TABLE_NAME);
+            ArrayList<FoodBean> list = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                int _id = cursor.getInt(cursor.getColumnIndex("_id"));
+                String name = cursor.getString(cursor.getColumnIndex("name"));
+                int period = cursor.getInt(cursor.getColumnIndex("period"));
+                String area = cursor.getString(cursor.getColumnIndex("area"));
+                String photo = cursor.getString(cursor.getColumnIndex("photo"));
+                String createTime = cursor.getString(cursor.getColumnIndex("createTime"));
+                String updateTime = cursor.getString(cursor.getColumnIndex("updateTime"));
+                String note = cursor.getString(cursor.getColumnIndex("note"));
+                if (Utils.leftDays(updateTime) >= period / 2) {
+                    list.add(new FoodBean(_id, name, period, photo, area, createTime, updateTime, note));
+                }
+            }
+            emitter.onNext(list);
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 }

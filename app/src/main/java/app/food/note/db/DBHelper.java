@@ -8,7 +8,7 @@ public class DBHelper extends SupportSQLiteOpenHelper.Callback {
     private static final int VERSION = 1;
     static final String TABLE_NAME = "food";
     private static final String CREATE_MESSAGE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME
-            + "(_id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,period TEXT,area TEXT,photo TEXT,createTime TEXT,updateTime TEXT);";
+            + "(_id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT,period INTEGER,area TEXT,photo TEXT,note TEXT,createTime TEXT,updateTime TEXT);";
 
     DBHelper() {
         super(VERSION);

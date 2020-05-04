@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".ui.MainActivity">
 
     <com.qmuiteam.qmui.widget.QMUITopBarLayout
         android:layout_width="match_parent"
@@ -14,7 +15,43 @@
         <com.qmuiteam.qmui.widget.QMUITopBar
             android:id="@+id/topbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                android:layout_alignParentEnd="true">
+
+                <ImageView
+                    android:id="@+id/notify_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add_black_24dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/notify_time"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/ic_notify_guoqi"
+                    app:layout_constraintStart_toEndOf="@id/notify_add"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/notify_point"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/shape_circle"
+                    android:layout_margin="2dp"
+                    app:layout_constraintEnd_toEndOf="@id/notify_time"
+                    app:layout_constraintTop_toTopOf="@id/notify_time" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.qmuiteam.qmui.widget.QMUITopBar>
 
     </com.qmuiteam.qmui.widget.QMUITopBarLayout>
 

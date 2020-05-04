@@ -30,6 +30,7 @@ public class DbUtils {
                     SupportSQLiteOpenHelper.Factory factory = new FrameworkSQLiteOpenHelperFactory();
                     SupportSQLiteOpenHelper helper = factory.create(configuration);
                     db = sqlBrite.wrapDatabaseHelper(helper, Schedulers.io());
+                    db.setLoggingEnabled(true);
                 }
             }
         }

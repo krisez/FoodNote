@@ -1,4 +1,4 @@
-package app.food.note.ui.main;
+package app.food.note.adapter;
 
 import android.content.Context;
 
@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import app.food.note.R;
+import app.food.note.ui.PlaceholderFragment;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -16,10 +17,10 @@ import app.food.note.R;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     private static String[] TAB_TITLES;
-    private static String[] TAB_ZONE = {"ice","dry","seasoning","normal"};
+    private PlaceholderFragment[] mFragments = new PlaceholderFragment[4];
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
-        super(fm);
+        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         TAB_TITLES = new String[]{context.getString(R.string.tab_ice_box),
                 context.getString(R.string.tab_dry_box),
                 context.getString(R.string.tab_seasoning_box),
@@ -29,9 +30,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     @NonNull
     public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(TAB_ZONE[position]);
+        PlaceholderFragment fragment = PlaceholderFragment.newInstance(TAB_TITLES[position]);
+        mFragments[position] = fragment;
+        return fragment;
     }
 
     @Nullable
@@ -43,5 +44,16 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return TAB_TITLES.length;
+    }
+
+    public void refreshData(String area){
+        for (int i = 0; i < TAB_TITLES.length; i++) {
+            if(TAB_TITLES[i].equals(area)){
+                if(mFragments[i]!=null){
+                    mFragments[i].refreshData();
+                }
+                break;
+            }
+        }
     }
 }

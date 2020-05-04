@@ -2,16 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="app.food.note">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
+        android:name=".App"
         android:allowBackup="false"
         android:icon="@mipmap/foodnote"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/foodnote"
         android:supportsRtl="true"
-        android:name=".App"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,8 +22,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FoodDetailActivity" />
-        <activity android:name=".WillPeriodActivity" />
+        <activity
+            android:name=".ui.FoodDetailActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".ui.WillPeriodActivity" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="app.food.note.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/path" />
+        </provider>
     </application>
 
 </manifest>
