@@ -1,4 +1,4 @@
-package app.food.note.ui;
+package app.food.note.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +21,7 @@ import app.food.note.FoodBean;
 import app.food.note.R;
 import app.food.note.adapter.FoodAdapter;
 import app.food.note.db.RxDbManager;
+import app.food.note.ui.activity.FoodDetailActivity;
 import io.reactivex.disposables.Disposable;
 
 import static android.app.Activity.RESULT_OK;
@@ -28,15 +29,15 @@ import static android.app.Activity.RESULT_OK;
 public class PlaceholderFragment extends Fragment {
 
     private static final String ARG_SECTION_AREA = "section_area";
-    private String area = "";
+    private String zone = "";
     private FoodAdapter mAdapter;
     private List<FoodBean> mFoodBeanList = new ArrayList<>();
     private SwipeRefreshLayout mRefreshLayout;
 
-    public static PlaceholderFragment newInstance(String area) {
+    public static PlaceholderFragment newInstance(String zone) {
         PlaceholderFragment fragment = new PlaceholderFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(ARG_SECTION_AREA, area);
+        bundle.putString(ARG_SECTION_AREA, zone);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -44,8 +45,8 @@ public class PlaceholderFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         assert getArguments() != null;
-        area = getArguments().getString(ARG_SECTION_AREA);
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        zone = getArguments().getString(ARG_SECTION_AREA);
+        return inflater.inflate(R.layout.fragment_ice_box, container, false);
     }
 
     @Override
@@ -66,7 +67,7 @@ public class PlaceholderFragment extends Fragment {
     }
 
     public void refreshData() {
-        Disposable d = RxDbManager.getInstance().query(area)
+        Disposable d = RxDbManager.getInstance().queryIcebox(zone)
                 .subscribe(foodBeans -> {
                     mFoodBeanList.clear();
                     mFoodBeanList.addAll(foodBeans);

@@ -10,10 +10,11 @@
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/ice_box"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            app:cardBackgroundColor="@color/main_color"
+            app:cardBackgroundColor="@color/save_card_color"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp">
 
@@ -29,16 +30,17 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
                 android:layout_margin="8dp"
-                android:text="@string/tab_ice_box"
+                android:text="@string/ice_box"
                 android:textColor="@color/black"
                 android:textSize="24sp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/dry_box"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            app:cardBackgroundColor="@color/main_color"
+            app:cardBackgroundColor="@color/save_card_color"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp">
 
@@ -53,16 +55,17 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
                 android:layout_margin="8dp"
-                android:text="@string/tab_dry_box"
+                android:text="@string/dry_box"
                 android:textColor="@color/black"
                 android:textSize="24sp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/season_box"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            app:cardBackgroundColor="@color/main_color"
+            app:cardBackgroundColor="@color/save_card_color"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp">
 
@@ -78,16 +81,17 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
                 android:layout_margin="8dp"
-                android:text="@string/tab_seasoning_box"
+                android:text="@string/seasoning_box"
                 android:textColor="@color/black"
                 android:textSize="24sp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/normal_box"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            app:cardBackgroundColor="@color/main_color"
+            app:cardBackgroundColor="@color/save_card_color"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp">
 
@@ -103,7 +107,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
                 android:layout_margin="8dp"
-                android:text="@string/tab_normal_zone"
+                android:text="@string/normal_zone"
                 android:textColor="@color/black"
                 android:textSize="24sp" />
         </androidx.cardview.widget.CardView>

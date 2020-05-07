@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import app.food.note.R;
-import app.food.note.ui.PlaceholderFragment;
+import app.food.note.ui.fragment.PlaceholderFragment;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -21,10 +21,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        TAB_TITLES = new String[]{context.getString(R.string.tab_ice_box),
-                context.getString(R.string.tab_dry_box),
-                context.getString(R.string.tab_seasoning_box),
-                context.getString(R.string.tab_normal_zone)};
+        TAB_TITLES = new String[]{context.getString(R.string.tab_cold_storage),
+                context.getString(R.string.tab_soft_freeze),
+                context.getString(R.string.tab_freezing)};
     }
 
     @Override

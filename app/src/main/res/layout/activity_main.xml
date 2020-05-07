@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:fitsSystemWindows="true"
-    tools:context=".ui.MainActivity">
+    android:orientation="vertical"
+    tools:context=".ui.activity.MainActivity">
 
     <TextView
         android:id="@+id/main_title"
@@ -24,19 +25,28 @@
         android:id="@+id/frame_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@drawable/main_bg"
         android:layout_weight="1" />
-
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="1px"
+        android:background="@color/black" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/main_color">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/main_save"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/insert_food"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/iv_save"
@@ -51,6 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="存储"
+                android:textColor="@color/select_color"
                 android:textSize="15sp" />
         </LinearLayout>
 
@@ -58,15 +69,22 @@
             android:id="@+id/insert_food"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_add" />
+            android:src="@drawable/ic_add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/main_guoqi"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/insert_food"
+            app:layout_constraintTop_toTopOf="parent">
 
 
             <ImageView
@@ -74,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_rili" />
+                android:src="@drawable/ic_guoqi_reset" />
 
             <TextView
                 android:id="@+id/tv_guoqi"
@@ -82,8 +100,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="临期"
+                android:textColor="@color/select_color_grey"
                 android:textSize="15sp" />
         </LinearLayout>
-    </LinearLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

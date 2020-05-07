@@ -31,8 +31,7 @@ public class RxDbManager {
         return new RxDbManager();
     }
 
-    //服务器返回有新的消息
-    //自己发送的消息
+    //插入一条新的食物相关内容
     public Observable<Boolean> insert(final FoodBean food) {
         return Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             ContentValues values = new ContentValues();
@@ -43,15 +42,40 @@ public class RxDbManager {
             values.put("createTime", Utils.getTime());
             values.put("updateTime", Utils.getTime());
             values.put("note", food.note);
+            values.put("iceZone", food.zone);
+            values.put("consume", 0);
+            values.put("type", food.type);
             db.insert(DBHelper.TABLE_NAME, SQLiteDatabase.CONFLICT_REPLACE, values);
             e.onNext(true);
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    //查询语句
-    public Observable<List<FoodBean>> query(String zone) {
+    //查询语句，分别查询干货、调料、常温食物
+    public Observable<List<FoodBean>> query(String area) {
         return Observable.create((ObservableOnSubscribe<List<FoodBean>>) emitter -> {
-            Cursor cursor = db.query("select * from " + DBHelper.TABLE_NAME + " where area=\"" + zone + "\" order by updateTime desc");
+            Cursor cursor = db.query("select * from " + DBHelper.TABLE_NAME + " where area=\"" + area + "\" and consume=0 order by updateTime desc");
+            List<FoodBean> list = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                int _id = cursor.getInt(cursor.getColumnIndex("_id"));
+                String name = cursor.getString(cursor.getColumnIndex("name"));
+                int period = cursor.getInt(cursor.getColumnIndex("period"));
+                String a = cursor.getString(cursor.getColumnIndex("area"));
+                String photo = cursor.getString(cursor.getColumnIndex("photo"));
+                String createTime = cursor.getString(cursor.getColumnIndex("createTime"));
+                String updateTime = cursor.getString(cursor.getColumnIndex("updateTime"));
+                String note = cursor.getString(cursor.getColumnIndex("note"));
+                String iceZone = cursor.getString(cursor.getColumnIndex("iceZone"));
+                int type = cursor.getInt(cursor.getColumnIndex("type"));
+                list.add(new FoodBean(_id, name, period, photo, a, createTime, updateTime, note, iceZone, type));
+            }
+            emitter.onNext(list);
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    //查询语句，插叙冰箱不同区域的不同食物
+    public Observable<List<FoodBean>> queryIcebox(String iceZone) {
+        return Observable.create((ObservableOnSubscribe<List<FoodBean>>) emitter -> {
+            Cursor cursor = db.query("select * from " + DBHelper.TABLE_NAME + " where iceZone=\"" + iceZone + "\" and consume=0");
             List<FoodBean> list = new ArrayList<>();
             while (cursor.moveToNext()) {
                 int _id = cursor.getInt(cursor.getColumnIndex("_id"));
@@ -62,27 +86,39 @@ public class RxDbManager {
                 String createTime = cursor.getString(cursor.getColumnIndex("createTime"));
                 String updateTime = cursor.getString(cursor.getColumnIndex("updateTime"));
                 String note = cursor.getString(cursor.getColumnIndex("note"));
-                list.add(new FoodBean(_id, name, period, photo, area, createTime, updateTime, note));
+                String zone = cursor.getString(cursor.getColumnIndex("iceZone"));
+                int type = cursor.getInt(cursor.getColumnIndex("type"));
+                list.add(new FoodBean(_id, name, period, photo, area, createTime, updateTime, note, zone, type));
             }
             emitter.onNext(list);
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    //删除消息记录，服务器不做操作
-    public void delete(ArrayList<Integer> _id) {
-        BriteDatabase.Transaction transaction = db.newTransaction();
-        try {
-            for (int i = 0; i < _id.size(); i++) {
-                db.delete(DBHelper.TABLE_NAME, "_id = ?", _id.get(i) + "");
+    //查询语句,查询搜索的时候能查到的食物
+    public Observable<List<FoodBean>> querySearchType(int t) {
+        return Observable.create((ObservableOnSubscribe<List<FoodBean>>) emitter -> {
+            Cursor cursor = db.query("select * from " + DBHelper.TABLE_NAME + " where type=" + t);
+            List<FoodBean> list = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                int _id = cursor.getInt(cursor.getColumnIndex("_id"));
+                String name = cursor.getString(cursor.getColumnIndex("name"));
+                int period = cursor.getInt(cursor.getColumnIndex("period"));
+                String area = cursor.getString(cursor.getColumnIndex("area"));
+                String photo = cursor.getString(cursor.getColumnIndex("photo"));
+                String createTime = cursor.getString(cursor.getColumnIndex("createTime"));
+                String updateTime = cursor.getString(cursor.getColumnIndex("updateTime"));
+                String note = cursor.getString(cursor.getColumnIndex("note"));
+                String zone = cursor.getString(cursor.getColumnIndex("iceZone"));
+                int type = cursor.getInt(cursor.getColumnIndex("type"));
+                list.add(new FoodBean(_id, name, period, photo, area, createTime, updateTime, note, zone, type));
             }
-        } finally {
-            transaction.markSuccessful();
-        }
+            emitter.onNext(list);
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     //清空数据库
-    public void clear() {
-        db.execute("delete from " + DBHelper.TABLE_NAME + ";");
+    public void clear(String tableName) {
+        db.execute("delete from " + tableName + ";");
     }
 
     public Observable<Boolean> update(FoodBean bean) {
@@ -94,6 +130,17 @@ public class RxDbManager {
             values.put("photo", bean.photo);
             values.put("updateTime", Utils.getTime());
             values.put("note", bean.note);
+            values.put("iceZone", bean.zone);
+            values.put("type", bean.type);
+            db.update(DBHelper.TABLE_NAME, SQLiteDatabase.CONFLICT_REPLACE, values, "_id=?", bean.id + "");
+            emitter.onNext(true);
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<Boolean> consumeFood(FoodBean bean) {
+        return Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
+            ContentValues values = new ContentValues();
+            values.put("consume", 1);
             db.update(DBHelper.TABLE_NAME, SQLiteDatabase.CONFLICT_REPLACE, values, "_id=?", bean.id + "");
             emitter.onNext(true);
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
@@ -112,8 +159,48 @@ public class RxDbManager {
                 String createTime = cursor.getString(cursor.getColumnIndex("createTime"));
                 String updateTime = cursor.getString(cursor.getColumnIndex("updateTime"));
                 String note = cursor.getString(cursor.getColumnIndex("note"));
+                String zone = cursor.getString(cursor.getColumnIndex("iceZone"));
+                int type = cursor.getInt(cursor.getColumnIndex("type"));
                 if (Utils.leftDays(updateTime) >= period / 2) {
-                    list.add(new FoodBean(_id, name, period, photo, area, createTime, updateTime, note));
+                    list.add(new FoodBean(_id, name, period, photo, area, createTime, updateTime, note, zone, type));
+                }
+            }
+            emitter.onNext(list);
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+    //搜索记录
+    //插入一条新的搜索记录
+    public Observable<Boolean> insertHistory(int type,int foodId) {
+        return Observable.create((ObservableOnSubscribe<Boolean>) e -> {
+            ContentValues values = new ContentValues();
+            values.put("type", type);
+            values.put("foodId", foodId);
+            db.insert(DBHelper.SEARCH_TABLE_NAME, SQLiteDatabase.CONFLICT_REPLACE, values);
+            e.onNext(true);
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+
+    public Observable<List<FoodBean>> querySearchHistory(int t){
+        return Observable.create((ObservableOnSubscribe<List<FoodBean>>)emitter->{
+            Cursor cursor = db.query("select * from " + DBHelper.SEARCH_TABLE_NAME + " where type=" + t);
+            List<FoodBean> list = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                int _id = cursor.getInt(cursor.getColumnIndex("_id"));
+                String name = cursor.getString(cursor.getColumnIndex("name"));
+                int period = cursor.getInt(cursor.getColumnIndex("period"));
+                String area = cursor.getString(cursor.getColumnIndex("area"));
+                String photo = cursor.getString(cursor.getColumnIndex("photo"));
+                String createTime = cursor.getString(cursor.getColumnIndex("createTime"));
+                String updateTime = cursor.getString(cursor.getColumnIndex("updateTime"));
+                String note = cursor.getString(cursor.getColumnIndex("note"));
+                String zone = cursor.getString(cursor.getColumnIndex("iceZone"));
+                int type = cursor.getInt(cursor.getColumnIndex("type"));
+                if (Utils.leftDays(updateTime) >= period / 2) {
+                    list.add(new FoodBean(_id, name, period, photo, area, createTime, updateTime, note, zone, type));
                 }
             }
             emitter.onNext(list);

@@ -8,4 +8,9 @@
     <color name="light_blue">#009DFF</color>
     <color name="grey">#A5A5A5</color>
     <color name="main_color">#fdf2ee</color>
+    <color name="save_card_color">#ABBCFF</color>
+    <color name="select_color">#50607C</color>
+    <color name="select_color_grey">#AEAEAE</color>
+    <color name="color_50607C">#50607C</color>
+
 </resources>

@@ -1,8 +1,14 @@
 <resources>
     <string name="app_name">食物笔记</string>
-    <string name="tab_ice_box">冰箱</string>
-    <string name="tab_dry_box">干货区</string>
-    <string name="tab_seasoning_box">调料区</string>
-    <string name="tab_normal_zone">常温区</string>
+    <string name="ice_box">冰箱</string>
+    <string name="dry_box">干货区</string>
+    <string name="seasoning_box">调料区</string>
+    <string name="normal_zone">常温区</string>
     <string name="click_area">点击选择区域</string>
+
+    <string name="tab_cold_storage">冷藏区</string>
+    <string name="tab_soft_freeze">软冻区</string>
+    <string name="tab_freezing">冷冻区</string>
+    <string name="his_record">历史记录</string>
+
 </resources>

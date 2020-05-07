@@ -1,12 +1,10 @@
-package app.food.note.ui;
+package app.food.note.ui.activity;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -71,10 +69,10 @@ public class FoodDetailActivity extends AppCompatActivity {
         }
 
         area.setOnClickListener(v -> new QMUIBottomSheet.BottomListSheetBuilder(this)
-                .addItem(getString(R.string.tab_ice_box))
-                .addItem(getString(R.string.tab_dry_box))
-                .addItem(getString(R.string.tab_seasoning_box))
-                .addItem(getString(R.string.tab_normal_zone))
+                .addItem(getString(R.string.ice_box))
+                .addItem(getString(R.string.dry_box))
+                .addItem(getString(R.string.seasoning_box))
+                .addItem(getString(R.string.normal_zone))
                 .setGravityCenter(true)
                 .setTitle("存放区域")
                 .setAddCancelBtn(true)

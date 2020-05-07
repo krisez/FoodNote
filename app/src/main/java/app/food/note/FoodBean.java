@@ -12,19 +12,25 @@ public class FoodBean implements Parcelable {
     public String createTime;
     public String updateTime;
     public String note;
+    public String zone = "";//冰箱的区域
+    public int type; //食物类型，冷冻冷藏，粮油干货.....
 
     public FoodBean() {
     }
 
-    public FoodBean(String name, int period, String photo, String area, String note) {
+    public FoodBean(String name, int period, String photo, String area, String note, String zone, int type) {
         this.name = name;
         this.period = period;
         this.photo = photo;
         this.area = area;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
         this.note = note;
+        this.zone = zone;
+        this.type = type;
     }
 
-    public FoodBean(int id, String name, int period, String photo, String area, String createTime, String updateTime,String note) {
+    public FoodBean(int id, String name, int period, String photo, String area, String createTime, String updateTime, String note, String zone, int type) {
         this.id = id;
         this.name = name;
         this.period = period;
@@ -33,6 +39,8 @@ public class FoodBean implements Parcelable {
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.note = note;
+        this.zone = zone;
+        this.type = type;
     }
 
     private FoodBean(Parcel in) {
@@ -44,6 +52,8 @@ public class FoodBean implements Parcelable {
         createTime = in.readString();
         updateTime = in.readString();
         note = in.readString();
+        zone = in.readString();
+        type = in.readInt();
     }
 
     public static final Creator<FoodBean> CREATOR = new Creator<FoodBean>() {
@@ -69,6 +79,8 @@ public class FoodBean implements Parcelable {
                 ", createTime='" + createTime + '\'' +
                 ", updateTime='" + updateTime + '\'' +
                 ", note='" + note + '\'' +
+                ", zone='" + zone + "\'" +
+                ", type='" + type + "\'" +
                 '}';
     }
 
@@ -87,5 +99,7 @@ public class FoodBean implements Parcelable {
         parcel.writeString(createTime);
         parcel.writeString(updateTime);
         parcel.writeString(note);
+        parcel.writeString(zone);
+        parcel.writeInt(type);
     }
 }
