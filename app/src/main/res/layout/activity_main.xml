@@ -1,68 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     tools:context=".ui.MainActivity">
 
-    <com.qmuiteam.qmui.widget.QMUITopBarLayout
+    <TextView
+        android:id="@+id/main_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:gravity="center"
+        android:padding="8dp"
+        android:textSize="18sp" />
 
-        <com.qmuiteam.qmui.widget.QMUITopBar
-            android:id="@+id/topbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
+        android:id="@+id/frame_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/main_color">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="8dp"
-                android:layout_alignParentEnd="true">
+                android:layout_gravity="center"
+                android:src="@drawable/ic_bingxiang" />
 
-                <ImageView
-                    android:id="@+id/notify_add"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_add_black_24dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/tv_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="存储"
+                android:textSize="15sp" />
+        </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/notify_time"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginStart="8dp"
-                    android:src="@drawable/ic_notify_guoqi"
-                    app:layout_constraintStart_toEndOf="@id/notify_add"
-                    app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/insert_food"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_add" />
 
-                <ImageView
-                    android:id="@+id/notify_point"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/shape_circle"
-                    android:layout_margin="2dp"
-                    app:layout_constraintEnd_toEndOf="@id/notify_time"
-                    app:layout_constraintTop_toTopOf="@id/notify_time" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        </com.qmuiteam.qmui.widget.QMUITopBar>
 
-    </com.qmuiteam.qmui.widget.QMUITopBarLayout>
+            <ImageView
+                android:id="@+id/iv_guoqi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_rili" />
 
-    <com.qmuiteam.qmui.widget.tab.QMUITabSegment
-        android:id="@+id/tab"
-        android:layout_width="match_parent"
-        android:layout_height="48dp" />
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+            <TextView
+                android:id="@+id/tv_guoqi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="临期"
+                android:textSize="15sp" />
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
