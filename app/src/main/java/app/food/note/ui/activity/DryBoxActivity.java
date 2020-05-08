@@ -50,6 +50,7 @@ public class DryBoxActivity extends AppCompatActivity {
         mRefreshLayout.setOnRefreshListener(this::refreshData);
         refreshData();
         findViewById(R.id.other_ll).setBackgroundResource(R.mipmap.bg_dry);
+
     }
 
     private void refreshData() {

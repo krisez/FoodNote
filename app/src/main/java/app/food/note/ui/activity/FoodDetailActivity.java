@@ -187,9 +187,7 @@ public class FoodDetailActivity extends AppCompatActivity {
         findViewById(R.id.detail_period_iv).setOnClickListener(v -> {
             if (!topBar.getTitle().equals("修改")) {
                 Calendar calendar = Calendar.getInstance();
-                new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
-                    mTvPeriod.setText(Utils.period(year, month, dayOfMonth));
-                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE)).show();
+                new DatePickerDialog(this, (view, year, month, dayOfMonth) -> mTvPeriod.setText(Utils.period(year, month, dayOfMonth)), calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE)).show();
             } else {
                 Toast.makeText(this, "不支持修改~", Toast.LENGTH_SHORT).show();
             }

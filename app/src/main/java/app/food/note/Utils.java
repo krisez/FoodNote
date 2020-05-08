@@ -42,7 +42,7 @@ public class Utils {
         calendar.set(year, month, day);
         long l = calendar.getTimeInMillis() - now;
         int days = (int) (l / 1000 / 60 / 60 / 24);
-        return format.format(calendar.getTime()) + "/" + days;
+        return format.format(calendar.getTime()) + "/" + days + "天";
     }
 
     static String getLeftDays(String endTime) {
