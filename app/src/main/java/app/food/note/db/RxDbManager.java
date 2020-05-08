@@ -1,22 +1,18 @@
 package app.food.note.db;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.squareup.sqlbrite3.BriteDatabase;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
 import app.food.note.FoodBean;
 import app.food.note.Utils;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -161,7 +157,7 @@ public class RxDbManager {
                 String note = cursor.getString(cursor.getColumnIndex("note"));
                 String zone = cursor.getString(cursor.getColumnIndex("iceZone"));
                 int type = cursor.getInt(cursor.getColumnIndex("type"));
-                if (Utils.leftDays(createTime, period)) {
+                if (Utils.willPeriod(createTime, period)) {
                     list.add(new FoodBean(_id, name, period, photo, area, createTime, updateTime, note, zone, type));
                 }
             }

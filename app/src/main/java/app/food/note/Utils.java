@@ -8,12 +8,12 @@ import java.util.Locale;
 
 public class Utils {
     public static String getTime() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", new Locale("zh", "CN"));
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("zh", "CN"));
         return format.format(new Date());
     }
 
-    public static boolean leftDays(String createTime, String period) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", new Locale("zh", "CN"));
+    public static boolean willPeriod(String createTime, String period) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("zh", "CN"));
         SimpleDateFormat p = new SimpleDateFormat("yyyy-MM-dd", new Locale("zh", "CN"));
         try {
             Date date = format.parse(createTime);//创建时间
@@ -35,14 +35,31 @@ public class Utils {
         return false;
     }
 
-    public static String period(int year,int month,int day){
+    public static String period(int year, int month, int day) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("zh", "CN"));
         Calendar calendar = Calendar.getInstance();
         long now = calendar.getTimeInMillis();
-        calendar.set(year,month,day);
+        calendar.set(year, month, day);
         long l = calendar.getTimeInMillis() - now;
         int days = (int) (l / 1000 / 60 / 60 / 24);
         return format.format(calendar.getTime()) + "/" + days;
+    }
+
+    static String getLeftDays(String endTime) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("zh", "CN"));
+        try {
+            Date date = format.parse(endTime);
+            Calendar calendar = Calendar.getInstance();
+            long now = calendar.getTimeInMillis();
+            if (date != null) {
+                calendar.setTime(date);
+                int day = (int) ((calendar.getTimeInMillis() - now) / 1000 / 60 / 60 / 24);
+                return "" + day;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "0";
     }
 
 }

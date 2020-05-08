@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import app.food.note.R;
+import app.food.note.ui.activity.FoodDetailActivity;
 import app.food.note.ui.activity.SearchFoodActivity;
 
 public class InsertFragment extends Fragment {
@@ -24,7 +25,7 @@ public class InsertFragment extends Fragment {
         view.findViewById(R.id.insert_meat).setOnClickListener(v -> startActivity(new Intent(getContext(), SearchFoodActivity.class).putExtra("type", 2)));
         view.findViewById(R.id.insert_vegetables).setOnClickListener(v -> startActivity(new Intent(getContext(), SearchFoodActivity.class).putExtra("type", 3)));
         view.findViewById(R.id.insert_tiaoliao).setOnClickListener(v -> startActivity(new Intent(getContext(), SearchFoodActivity.class).putExtra("type", 4)));
-        view.findViewById(R.id.insert_more).setOnClickListener(v -> startActivity(new Intent(getContext(), SearchFoodActivity.class).putExtra("type", 5)));
+        view.findViewById(R.id.insert_more).setOnClickListener(v -> startActivity(new Intent(getContext(), FoodDetailActivity.class)));
         return view;
     }
 }

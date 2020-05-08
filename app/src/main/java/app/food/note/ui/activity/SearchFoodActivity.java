@@ -126,9 +126,12 @@ public class SearchFoodActivity extends AppCompatActivity {
         mSearchAdapter.setOnItemClickListener((adapter, view, position) -> {
             Disposable d = RxDbManager.getInstance().insertHistory(TYPE, mTemp.get(position).id).subscribe(aBoolean -> {
                 if (aBoolean) {
-                    startActivityForResult(new Intent(this, FoodDetailActivity.class).putExtra("bean", mTemp.get(position)).putExtra("insert",1), 200);
+                    startActivityForResult(new Intent(this, FoodDetailActivity.class).putExtra("bean", mTemp.get(position)).putExtra("insert", 1), 200);
                 }
             });
+        });
+        mHisAdapter.setOnItemClickListener((adapter, view, position) -> {
+            startActivityForResult(new Intent(this, FoodDetailActivity.class).putExtra("bean", mHisList.get(position)).putExtra("insert", 1), 200);
         });
     }
 

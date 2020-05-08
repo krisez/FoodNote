@@ -57,6 +57,7 @@ public class PeriodFragment extends Fragment {
         });
         mAdapter.setEmptyView(R.layout.empty_view);
         mRefreshLayout.setOnRefreshListener(this::getList);
+        getList();
     }
 
     private void getList() {

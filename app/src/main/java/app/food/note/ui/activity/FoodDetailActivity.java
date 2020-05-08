@@ -56,6 +56,7 @@ public class FoodDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_detail);
         QMUIStatusBarHelper.translucent(this);
         QMUIStatusBarHelper.setStatusBarLightMode(this);
@@ -76,13 +77,14 @@ public class FoodDetailActivity extends AppCompatActivity {
                 topBar.setTitle("新增");
             } else {
                 topBar.setTitle("修改");
+                mTvPeriod.setText(mFoodBean.period);
             }
             mName.setText(mFoodBean.name);
-            mTvPeriod.setText(mFoodBean.period);
             mNote.setText(mFoodBean.note);
             if (!mFoodBean.photo.isEmpty()) {
                 Glide.with(this).load(mFoodBean.photo).into(mPhoto);
             }
+            photo = mFoodBean.photo;
             mTvArea.setText(mFoodBean.area);
             mTvType.setText(mFoodBean.getType());
             beanType = mFoodBean.type;
@@ -183,10 +185,14 @@ public class FoodDetailActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.detail_period_iv).setOnClickListener(v -> {
-            Calendar calendar = Calendar.getInstance();
-            new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
-                mTvPeriod.setText(Utils.period(year, month, dayOfMonth));
-            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE)).show();
+            if (!topBar.getTitle().equals("修改")) {
+                Calendar calendar = Calendar.getInstance();
+                new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+                    mTvPeriod.setText(Utils.period(year, month, dayOfMonth));
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE)).show();
+            } else {
+                Toast.makeText(this, "不支持修改~", Toast.LENGTH_SHORT).show();
+            }
         });
 
         findViewById(R.id.detail_type).setOnClickListener(v -> {
