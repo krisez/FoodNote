@@ -58,7 +58,7 @@ public class RxDbManager {
             while (cursor.moveToNext()) {
                 int _id = cursor.getInt(cursor.getColumnIndex("_id"));
                 String name = cursor.getString(cursor.getColumnIndex("name"));
-                int period = cursor.getInt(cursor.getColumnIndex("period"));
+                String period = cursor.getString(cursor.getColumnIndex("period"));
                 String a = cursor.getString(cursor.getColumnIndex("area"));
                 String photo = cursor.getString(cursor.getColumnIndex("photo"));
                 String createTime = cursor.getString(cursor.getColumnIndex("createTime"));
@@ -80,7 +80,7 @@ public class RxDbManager {
             while (cursor.moveToNext()) {
                 int _id = cursor.getInt(cursor.getColumnIndex("_id"));
                 String name = cursor.getString(cursor.getColumnIndex("name"));
-                int period = cursor.getInt(cursor.getColumnIndex("period"));
+                String period = cursor.getString(cursor.getColumnIndex("period"));
                 String area = cursor.getString(cursor.getColumnIndex("area"));
                 String photo = cursor.getString(cursor.getColumnIndex("photo"));
                 String createTime = cursor.getString(cursor.getColumnIndex("createTime"));
@@ -102,7 +102,7 @@ public class RxDbManager {
             while (cursor.moveToNext()) {
                 int _id = cursor.getInt(cursor.getColumnIndex("_id"));
                 String name = cursor.getString(cursor.getColumnIndex("name"));
-                int period = cursor.getInt(cursor.getColumnIndex("period"));
+                String period = cursor.getString(cursor.getColumnIndex("period"));
                 String area = cursor.getString(cursor.getColumnIndex("area"));
                 String photo = cursor.getString(cursor.getColumnIndex("photo"));
                 String createTime = cursor.getString(cursor.getColumnIndex("createTime"));
@@ -153,7 +153,7 @@ public class RxDbManager {
             while (cursor.moveToNext()) {
                 int _id = cursor.getInt(cursor.getColumnIndex("_id"));
                 String name = cursor.getString(cursor.getColumnIndex("name"));
-                int period = cursor.getInt(cursor.getColumnIndex("period"));
+                String period = cursor.getString(cursor.getColumnIndex("period"));
                 String area = cursor.getString(cursor.getColumnIndex("area"));
                 String photo = cursor.getString(cursor.getColumnIndex("photo"));
                 String createTime = cursor.getString(cursor.getColumnIndex("createTime"));
@@ -161,7 +161,7 @@ public class RxDbManager {
                 String note = cursor.getString(cursor.getColumnIndex("note"));
                 String zone = cursor.getString(cursor.getColumnIndex("iceZone"));
                 int type = cursor.getInt(cursor.getColumnIndex("type"));
-                if (Utils.leftDays(updateTime) >= period / 2) {
+                if (Utils.leftDays(createTime, period)) {
                     list.add(new FoodBean(_id, name, period, photo, area, createTime, updateTime, note, zone, type));
                 }
             }
@@ -172,7 +172,7 @@ public class RxDbManager {
 
     //搜索记录
     //插入一条新的搜索记录
-    public Observable<Boolean> insertHistory(int type,int foodId) {
+    public Observable<Boolean> insertHistory(int type, int foodId) {
         return Observable.create((ObservableOnSubscribe<Boolean>) e -> {
             ContentValues values = new ContentValues();
             values.put("type", type);
@@ -183,25 +183,20 @@ public class RxDbManager {
     }
 
 
-
-    public Observable<List<FoodBean>> querySearchHistory(int t){
-        return Observable.create((ObservableOnSubscribe<List<FoodBean>>)emitter->{
-            Cursor cursor = db.query("select * from " + DBHelper.SEARCH_TABLE_NAME + " where type=" + t);
+    public Observable<List<FoodBean>> querySearchHistory(int t) {
+        return Observable.create((ObservableOnSubscribe<List<FoodBean>>) emitter -> {
+            Cursor cursor = db.query("select * from " + DBHelper.TABLE_NAME + " where _id in (select foodId from " + DBHelper.SEARCH_TABLE_NAME + " where type="+ t + ")");
             List<FoodBean> list = new ArrayList<>();
             while (cursor.moveToNext()) {
                 int _id = cursor.getInt(cursor.getColumnIndex("_id"));
                 String name = cursor.getString(cursor.getColumnIndex("name"));
-                int period = cursor.getInt(cursor.getColumnIndex("period"));
+                String period = cursor.getString(cursor.getColumnIndex("period"));
                 String area = cursor.getString(cursor.getColumnIndex("area"));
                 String photo = cursor.getString(cursor.getColumnIndex("photo"));
-                String createTime = cursor.getString(cursor.getColumnIndex("createTime"));
-                String updateTime = cursor.getString(cursor.getColumnIndex("updateTime"));
                 String note = cursor.getString(cursor.getColumnIndex("note"));
                 String zone = cursor.getString(cursor.getColumnIndex("iceZone"));
                 int type = cursor.getInt(cursor.getColumnIndex("type"));
-                if (Utils.leftDays(updateTime) >= period / 2) {
-                    list.add(new FoodBean(_id, name, period, photo, area, createTime, updateTime, note, zone, type));
-                }
+                list.add(new FoodBean(_id, name, period, photo, area, note, zone, type));
             }
             emitter.onNext(list);
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());

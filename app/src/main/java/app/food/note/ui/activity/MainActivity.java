@@ -3,6 +3,7 @@ package app.food.note.ui.activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView mTvSave;
     private ImageView mIvPeriod;
     private TextView mTvPeriod;
+    private LinearLayout mainBg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBxFragment = new BxFragment();
         mInsertFragment = new InsertFragment();
         mPeriodFragment = new PeriodFragment();
+        mainBg = findViewById(R.id.main_ll);
         mIvSave = findViewById(R.id.iv_save);
         mTvSave = findViewById(R.id.tv_save);
         mIvPeriod = findViewById(R.id.iv_guoqi);
@@ -66,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mTitle.setText("我的厨房");
                 mTvSave.setTextColor(getResources().getColor(R.color.select_color));
                 mIvSave.setImageResource(R.drawable.ic_bingxiang);
+                mainBg.setBackgroundResource(R.mipmap.bg_main);
                 break;
             case R.id.main_guoqi:
                 mPeriodFragment = (PeriodFragment) getSupportFragmentManager().findFragmentByTag(PeriodFragment.class.getSimpleName());
@@ -80,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mTitle.setText("即将过期");
                 mTvPeriod.setTextColor(getResources().getColor(R.color.select_color));
                 mIvPeriod.setImageResource(R.drawable.ic_guoqi);
+                mainBg.setBackgroundResource(R.mipmap.bg_guoqi);
                 break;
             case R.id.insert_food:
                 mInsertFragment = (InsertFragment) getSupportFragmentManager().findFragmentByTag(InsertFragment.class.getSimpleName());
@@ -92,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     transaction.add(R.id.frame_container, mInsertFragment, InsertFragment.class.getSimpleName());
                 }
                 mTitle.setText("添加");
+                mainBg.setBackgroundResource(R.mipmap.bg_empty);
                 break;
         }
         transaction.commit();

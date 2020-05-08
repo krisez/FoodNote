@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -17,11 +16,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
-import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,8 +72,8 @@ public class SearchFoodActivity extends AppCompatActivity {
         mHisAdapter = new SearchHisAdapter(mHisList);
         mHistoryRecycler = findViewById(R.id.rv_search_history);
         mHistoryRecycler.setLayoutManager(new GridLayoutManager(this, 4));
-        mHistoryRecycler.setAdapter(mSearchAdapter);
-
+        mHistoryRecycler.setAdapter(mHisAdapter);
+        mHisAdapter.setEmptyView(R.layout.empty_search_history);
         adapterListener();
         initViewListener();
     }
@@ -89,8 +85,12 @@ public class SearchFoodActivity extends AppCompatActivity {
                         RxDbManager.getInstance().clear(DBHelper.SEARCH_TABLE_NAME);
                         dialog.dismiss();
                     })
-            .addAction("取消", (dialog, index) -> dialog.dismiss())
-            .show();
+                    .addAction("取消", (dialog, index) -> dialog.dismiss())
+                    .show();
+        });
+
+        findViewById(R.id.search_insert_food).setOnClickListener(v -> {
+            startActivityForResult(new Intent(this, FoodDetailActivity.class), 100);
         });
     }
 
@@ -99,6 +99,8 @@ public class SearchFoodActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 mTips.setVisibility(View.GONE);
+                mSearchRecycler.setVisibility(View.VISIBLE);
+                mHistoryRecycler.setVisibility(View.GONE);
             }
 
             @Override
@@ -114,15 +116,27 @@ public class SearchFoodActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (s.length() == 0) {
+                    mTips.setVisibility(View.VISIBLE);
+                    mSearchRecycler.setVisibility(View.GONE);
+                    mHistoryRecycler.setVisibility(View.VISIBLE);
+                }
             }
         });
         mSearchAdapter.setOnItemClickListener((adapter, view, position) -> {
             Disposable d = RxDbManager.getInstance().insertHistory(TYPE, mTemp.get(position).id).subscribe(aBoolean -> {
                 if (aBoolean) {
-                    startActivity(new Intent(this, FoodDetailActivity.class).putExtra("bean", mTemp.get(position)));
+                    startActivityForResult(new Intent(this, FoodDetailActivity.class).putExtra("bean", mTemp.get(position)).putExtra("insert",1), 200);
                 }
             });
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            finish();
+        }
     }
 }

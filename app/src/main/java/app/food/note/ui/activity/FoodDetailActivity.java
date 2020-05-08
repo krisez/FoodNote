@@ -1,16 +1,21 @@
 package app.food.note.ui.activity;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.util.Util;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.QMUITopBar;
 import com.qmuiteam.qmui.widget.dialog.QMUIBottomSheet;
@@ -20,13 +25,16 @@ import com.zhihu.matisse.engine.impl.GlideEngine;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import app.food.note.FoodBean;
 import app.food.note.R;
+import app.food.note.Utils;
 import app.food.note.db.RxDbManager;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -36,6 +44,14 @@ public class FoodDetailActivity extends AppCompatActivity {
     private FoodBean mFoodBean;
     private String photo = "";
     private ImageView mPhoto;
+    private TextView mTvPeriod;
+    private TextView mTvArea;
+    private TextView mTvType;
+    private EditText mName;
+    private EditText mNote;
+    private int beanType;
+    private boolean INSERT;
+    private String zone = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,27 +64,33 @@ public class FoodDetailActivity extends AppCompatActivity {
 
         mFoodBean = getIntent().getParcelableExtra("bean");
 
-        EditText name = findViewById(R.id.detail_name);
-        EditText period = findViewById(R.id.detail_period);
-        EditText note = findViewById(R.id.detail_note);
-        TextView area = findViewById(R.id.detail_area);
+        mName = findViewById(R.id.detail_name);
+        mNote = findViewById(R.id.detail_note);
         mPhoto = findViewById(R.id.detail_photo);
+        mTvPeriod = findViewById(R.id.detail_period);
+        mTvArea = findViewById(R.id.detail_area);
+        mTvType = findViewById(R.id.detail_type);
 
         if (mFoodBean != null) {
-            topBar.setTitle("详情");
-            name.setText(mFoodBean.name);
-            period.setText(mFoodBean.period + "");
-            note.setText(mFoodBean.note);
+            if (INSERT = (getIntent().getIntExtra("insert", 0) == 1)) {
+                topBar.setTitle("新增");
+            } else {
+                topBar.setTitle("修改");
+            }
+            mName.setText(mFoodBean.name);
+            mTvPeriod.setText(mFoodBean.period);
+            mNote.setText(mFoodBean.note);
             if (!mFoodBean.photo.isEmpty()) {
                 Glide.with(this).load(mFoodBean.photo).into(mPhoto);
             }
-            area.setText(mFoodBean.area);
-
+            mTvArea.setText(mFoodBean.area);
+            mTvType.setText(mFoodBean.getType());
+            beanType = mFoodBean.type;
         } else {
             topBar.setTitle("新增");
         }
 
-        area.setOnClickListener(v -> new QMUIBottomSheet.BottomListSheetBuilder(this)
+        findViewById(R.id.detail_area_iv).setOnClickListener(v -> new QMUIBottomSheet.BottomListSheetBuilder(this)
                 .addItem(getString(R.string.ice_box))
                 .addItem(getString(R.string.dry_box))
                 .addItem(getString(R.string.seasoning_box))
@@ -77,21 +99,36 @@ public class FoodDetailActivity extends AppCompatActivity {
                 .setTitle("存放区域")
                 .setAddCancelBtn(true)
                 .setOnSheetItemClickListener((dialog, itemView, position, tag) -> {
-                    area.setText(tag);
-                    dialog.dismiss();
+                    if (position == 0) {
+                        new QMUIBottomSheet.BottomListSheetBuilder(this)
+                                .addItem(getString(R.string.tab_cold_storage))
+                                .addItem(getString(R.string.tab_soft_freeze))
+                                .addItem(getString(R.string.tab_freezing))
+                                .setGravityCenter(true)
+                                .setTitle("冰箱")
+                                .setOnSheetItemClickListener((dialog1, itemView1, position1, tag1) -> {
+                                    zone = tag1;
+                                    mTvArea.setText(tag + "," + zone);
+                                    dialog1.dismiss();
+                                    dialog.dismiss();
+                                }).build().show();
+                    } else {
+                        mTvArea.setText(tag);
+                        dialog.dismiss();
+                    }
                 })
                 .build().show());
 
-        findViewById(R.id.detail_sure).setOnClickListener(v -> {
-            if (name.getText().toString().isEmpty()) {
+        topBar.addRightTextButton("完成", R.id.topbar_detail_sure).setOnClickListener(v -> {
+            if (mName.getText().toString().isEmpty()) {
                 Toast.makeText(this, "名称为空！", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (period.getText().toString().isEmpty()) {
+            if (mTvPeriod.getText().toString().isEmpty()) {
                 Toast.makeText(this, "保质期为空!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (area.getText().toString().equals(getString(R.string.click_area))) {
+            if (mTvArea.getText().toString().equals(getString(R.string.click_area))) {
                 Toast.makeText(this, "区域为空!", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -101,13 +138,19 @@ public class FoodDetailActivity extends AppCompatActivity {
             } else {
                 bean = new FoodBean();
             }
-            bean.name = name.getText().toString();
-            bean.period = Integer.parseInt(period.getText().toString());
+            bean.name = mName.getText().toString();
+            bean.period = mTvPeriod.getText().toString();
             bean.photo = photo;
-            bean.note = note.getText().toString();
-            bean.area = area.getText().toString();
+            bean.note = mNote.getText().toString();
+            if (mTvArea.getText().toString().contains(",")) {
+                bean.area = mTvArea.getText().toString().split(",")[0];
+            } else {
+                bean.area = mTvArea.getText().toString();
+            }
+            bean.type = beanType;
+            bean.zone = zone;
             Observable<Boolean> observable;
-            if (mFoodBean != null) {
+            if (mFoodBean != null && !INSERT) {
                 observable = RxDbManager.getInstance().update(bean);
             } else {
                 observable = RxDbManager.getInstance().insert(bean);
@@ -134,9 +177,33 @@ public class FoodDetailActivity extends AppCompatActivity {
                 } else {
                     requestPermissions(list.toArray(new String[0]), 200);
                 }
-            }else{
+            } else {
                 matisse();
             }
+        });
+
+        findViewById(R.id.detail_period_iv).setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+                mTvPeriod.setText(Utils.period(year, month, dayOfMonth));
+            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE)).show();
+        });
+
+        findViewById(R.id.detail_type).setOnClickListener(v -> {
+            new QMUIBottomSheet.BottomListSheetBuilder(this)
+                    .addItem("冷冻冷藏")
+                    .addItem("粮油干货")
+                    .addItem("肉类生鲜")
+                    .addItem("蔬菜")
+                    .addItem("调料酱料")
+                    .setGravityCenter(true)
+                    .setTitle("标签")
+                    .setAddCancelBtn(true)
+                    .setOnSheetItemClickListener((dialog, itemView, position, tag) -> {
+                        mTvType.setText(tag);
+                        beanType = position;
+                        dialog.dismiss();
+                    }).build().show();
         });
     }
 

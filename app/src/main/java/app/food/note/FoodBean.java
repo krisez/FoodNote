@@ -6,7 +6,7 @@ import android.os.Parcelable;
 public class FoodBean implements Parcelable {
     public int id;
     public String name;
-    public int period;//保质期
+    public String period;//保质期
     public String photo;
     public String area;
     public String createTime;
@@ -18,7 +18,7 @@ public class FoodBean implements Parcelable {
     public FoodBean() {
     }
 
-    public FoodBean(String name, int period, String photo, String area, String note, String zone, int type) {
+    public FoodBean(String name, String period, String photo, String area, String note, String zone, int type) {
         this.name = name;
         this.period = period;
         this.photo = photo;
@@ -30,7 +30,18 @@ public class FoodBean implements Parcelable {
         this.type = type;
     }
 
-    public FoodBean(int id, String name, int period, String photo, String area, String createTime, String updateTime, String note, String zone, int type) {
+    public FoodBean(int id, String name, String period, String photo, String area, String note, String zone, int type) {
+        this.id = id;
+        this.name = name;
+        this.period = period;
+        this.photo = photo;
+        this.area = area;
+        this.note = note;
+        this.zone = zone;
+        this.type = type;
+    }
+
+    public FoodBean(int id, String name, String period, String photo, String area, String createTime, String updateTime, String note, String zone, int type) {
         this.id = id;
         this.name = name;
         this.period = period;
@@ -46,7 +57,7 @@ public class FoodBean implements Parcelable {
     private FoodBean(Parcel in) {
         id = in.readInt();
         name = in.readString();
-        period = in.readInt();
+        period = in.readString();
         photo = in.readString();
         area = in.readString();
         createTime = in.readString();
@@ -93,7 +104,7 @@ public class FoodBean implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(id);
         parcel.writeString(name);
-        parcel.writeInt(period);
+        parcel.writeString(period);
         parcel.writeString(photo);
         parcel.writeString(area);
         parcel.writeString(createTime);
@@ -101,5 +112,27 @@ public class FoodBean implements Parcelable {
         parcel.writeString(note);
         parcel.writeString(zone);
         parcel.writeInt(type);
+    }
+
+    public String getType(){
+        String t = "";
+        switch (type){
+            case 0:
+                t = "冷冻收藏";
+                break;
+            case 1:
+                t = "粮油干货";
+                break;
+            case 2:
+                t = "肉类生鲜";
+                break;
+            case 3:
+                t = "蔬菜";
+                break;
+            case 4:
+                t = "调料酱料";
+                break;
+        }
+        return t;
     }
 }

@@ -4,8 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/main_ll"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
+    android:background="@mipmap/bg_main"
     tools:context=".ui.activity.MainActivity">
 
     <TextView
@@ -25,7 +27,6 @@
         android:id="@+id/frame_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@drawable/main_bg"
         android:layout_weight="1" />
     <View
         android:layout_width="match_parent"
@@ -34,8 +35,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/main_color">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/main_save"
