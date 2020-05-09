@@ -16,6 +16,7 @@ import app.food.note.ui.activity.IceBoxActivity;
 import app.food.note.ui.activity.NormalActivity;
 import app.food.note.ui.activity.SeasonActivity;
 
+//存储fragment的承载视图，只用于点击事件
 public class BxFragment extends Fragment {
     @Nullable
     @Override

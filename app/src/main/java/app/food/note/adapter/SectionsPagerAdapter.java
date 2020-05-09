@@ -44,15 +44,4 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return TAB_TITLES.length;
     }
-
-    public void refreshData(String area){
-        for (int i = 0; i < TAB_TITLES.length; i++) {
-            if(TAB_TITLES[i].equals(area)){
-                if(mFragments[i]!=null){
-                    mFragments[i].refreshData();
-                }
-                break;
-            }
-        }
-    }
 }

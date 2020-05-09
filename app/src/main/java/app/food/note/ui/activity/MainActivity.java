@@ -16,6 +16,7 @@ import app.food.note.ui.fragment.BxFragment;
 import app.food.note.ui.fragment.InsertFragment;
 import app.food.note.ui.fragment.PeriodFragment;
 
+//主页面,app的首页
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private BxFragment mBxFragment;

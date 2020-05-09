@@ -6,33 +6,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+//工具类，用于处理时间
 public class Utils {
     public static String getTime() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("zh", "CN"));
         return format.format(new Date());
-    }
-
-    public static boolean willPeriod(String createTime, String period) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("zh", "CN"));
-        SimpleDateFormat p = new SimpleDateFormat("yyyy-MM-dd", new Locale("zh", "CN"));
-        try {
-            Date date = format.parse(createTime);//创建时间
-            Date date1 = p.parse(period.split("/")[0]);//结束时间
-            Calendar calendar = Calendar.getInstance();
-            long now = calendar.getTimeInMillis();
-            if (date1 != null) {
-                calendar.setTime(date1);
-            }
-            long end = calendar.getTimeInMillis();
-            if (date != null) {
-                calendar.setTime(date);
-            }
-            long start = calendar.getTimeInMillis();
-            return ((end - start) / 2 > (end - now));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     public static String period(int year, int month, int day) {
@@ -45,7 +23,7 @@ public class Utils {
         return format.format(calendar.getTime()) + "/" + days + "天";
     }
 
-    static int getLeftDays(String endTime) {
+    public static int getLeftDays(String endTime) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("zh", "CN"));
         try {
             Date date = format.parse(endTime);
@@ -53,7 +31,8 @@ public class Utils {
             long now = calendar.getTimeInMillis();
             if (date != null) {
                 calendar.setTime(date);
-                return (int) ((calendar.getTimeInMillis() - now) / 1000 / 60 / 60 / 24);
+                long l = calendar.getTimeInMillis() - now;
+                return (int) (l / 1000 / 60 / 60 / 24) + 1;
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -61,4 +40,9 @@ public class Utils {
         return 0;
     }
 
+    public static String notifyTime(FoodBean bean) {
+        String[] p = bean.period.split("/");
+        int left = getLeftDays(p[0]);
+        return p[0] + "/" + left + "天";
+    }
 }

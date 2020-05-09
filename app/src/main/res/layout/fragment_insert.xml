@@ -14,7 +14,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:drawableTop="@drawable/ic_milk"
+            android:drawableTop="@mipmap/milk"
+            android:paddingTop="16dp"
             android:gravity="center"
             android:text="冷冻冷藏"
             android:textSize="24sp" />
@@ -29,7 +30,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:drawableTop="@drawable/ic_meat"
+            android:drawableTop="@mipmap/meat"
+            android:paddingTop="16dp"
             android:gravity="center"
             android:text="肉类生鲜"
             android:textSize="24sp" />
@@ -44,7 +46,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:drawableTop="@drawable/ic_tiaoliao"
+            android:drawableTop="@mipmap/tiaoliao"
+            android:paddingTop="16dp"
             android:gravity="center"
             android:text="调料酱料"
             android:textSize="24sp" />
@@ -67,7 +70,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:drawableTop="@drawable/ic_ganhuo"
+            android:drawableTop="@mipmap/ganhuo"
+            android:paddingTop="16dp"
             android:gravity="center"
             android:text="粮油干货"
             android:textSize="24sp" />
@@ -82,9 +86,10 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:drawableTop="@drawable/ic_vegetables"
+            android:drawableTop="@mipmap/shucai"
+            android:paddingTop="16dp"
             android:gravity="center"
-            android:text="蔬菜"
+            android:text="蔬菜水果"
             android:textSize="24sp" />
 
         <View
@@ -97,7 +102,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:drawableTop="@drawable/ic_more"
+            android:drawableTop="@mipmap/more"
+            android:paddingTop="16dp"
             android:gravity="center"
             android:text="自定义"
             android:textSize="24sp" />

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.TimeUtils;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -39,6 +40,7 @@ import app.food.note.db.RxDbManager;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
+//食物详情/编辑/新增
 public class FoodDetailActivity extends AppCompatActivity {
 
     private FoodBean mFoodBean;
@@ -77,7 +79,7 @@ public class FoodDetailActivity extends AppCompatActivity {
                 topBar.setTitle("新增");
             } else {
                 topBar.setTitle("修改");
-                mTvPeriod.setText(mFoodBean.period);
+                mTvPeriod.setText(Utils.notifyTime(mFoodBean));
             }
             mName.setText(mFoodBean.name);
             mNote.setText(mFoodBean.note);
@@ -211,7 +213,7 @@ public class FoodDetailActivity extends AppCompatActivity {
                     .addItem("冷冻冷藏")
                     .addItem("粮油干货")
                     .addItem("肉类生鲜")
-                    .addItem("蔬菜")
+                    .addItem("蔬菜水果")
                     .addItem("调料酱料")
                     .setGravityCenter(true)
                     .setTitle("标签")

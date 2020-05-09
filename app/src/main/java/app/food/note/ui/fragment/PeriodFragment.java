@@ -25,6 +25,7 @@ import app.food.note.db.RxDbManager;
 import app.food.note.ui.activity.FoodDetailActivity;
 import io.reactivex.disposables.Disposable;
 
+//过期的页面
 public class PeriodFragment extends Fragment {
 
     private SwipeRefreshLayout mRefreshLayout;
@@ -62,7 +63,9 @@ public class PeriodFragment extends Fragment {
 
     private void getList() {
         Disposable d = RxDbManager.getInstance().queryPeriod().subscribe(foodBeans -> {
-            mAdapter.setNewInstance(foodBeans);
+            list.clear();
+            list.addAll(foodBeans);
+            mAdapter.notifyDataSetChanged();
             mRefreshLayout.setRefreshing(false);
         }, throwable -> {
             Toast.makeText(getContext(), throwable.getMessage(),Toast.LENGTH_SHORT).show();

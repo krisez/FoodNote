@@ -112,11 +112,12 @@ public class RxDbManager {
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-    //清空数据库
+    //删除内容
     public void clear(String tableName, int type) {
         db.execute("delete from " + tableName + " where type=" + type + ";");
     }
 
+    //更新食物信息
     public Observable<Boolean> update(FoodBean bean) {
         return Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
             ContentValues values = new ContentValues();
@@ -133,6 +134,7 @@ public class RxDbManager {
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
+    //对食物标志位修改，已经处理过
     public Observable<Boolean> consumeFood(FoodBean bean) {
         return Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
             ContentValues values = new ContentValues();
@@ -142,9 +144,10 @@ public class RxDbManager {
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
+    //查询过期的食品
     public Observable<ArrayList<FoodBean>> queryPeriod() {
         return Observable.create((ObservableOnSubscribe<ArrayList<FoodBean>>) emitter -> {
-            Cursor cursor = db.query("select * from " + DBHelper.TABLE_NAME);
+            Cursor cursor = db.query("select * from " + DBHelper.TABLE_NAME + " where consume=0");
             ArrayList<FoodBean> list = new ArrayList<>();
             while (cursor.moveToNext()) {
                 int _id = cursor.getInt(cursor.getColumnIndex("_id"));
@@ -157,7 +160,7 @@ public class RxDbManager {
                 String note = cursor.getString(cursor.getColumnIndex("note"));
                 String zone = cursor.getString(cursor.getColumnIndex("iceZone"));
                 int type = cursor.getInt(cursor.getColumnIndex("type"));
-                if (Utils.willPeriod(createTime, period)) {
+                if (Utils.getLeftDays(period.split("/")[0]) <= 3) {
                     list.add(new FoodBean(_id, name, period, photo, area, createTime, updateTime, note, zone, type));
                 }
             }
@@ -178,7 +181,7 @@ public class RxDbManager {
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
-
+    //查询搜索记录，根据name分隔
     public Observable<List<FoodBean>> querySearchHistory(int t) {
         return Observable.create((ObservableOnSubscribe<List<FoodBean>>) emitter -> {
             Cursor cursor = db.query("select * from " + DBHelper.TABLE_NAME + " where _id in (select foodId from " + DBHelper.SEARCH_TABLE_NAME + " where type=" + t + ") group by name;");

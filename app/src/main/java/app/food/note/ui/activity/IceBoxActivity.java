@@ -16,6 +16,7 @@ import com.qmuiteam.qmui.widget.tab.QMUITabSegment;
 import app.food.note.R;
 import app.food.note.adapter.SectionsPagerAdapter;
 
+//冰箱页面，有三个fragment
 public class IceBoxActivity extends AppCompatActivity {
 
     @Override

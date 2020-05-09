@@ -23,6 +23,7 @@ import app.food.note.adapter.FoodAdapter;
 import app.food.note.db.RxDbManager;
 import io.reactivex.disposables.Disposable;
 
+//调料区
 public class SeasonActivity extends AppCompatActivity {
 
     private FoodAdapter mAdapter;

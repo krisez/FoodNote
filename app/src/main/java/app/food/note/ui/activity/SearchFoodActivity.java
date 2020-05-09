@@ -31,6 +31,7 @@ import app.food.note.db.DBHelper;
 import app.food.note.db.RxDbManager;
 import io.reactivex.disposables.Disposable;
 
+//搜索内容，根据type（标签）的不同选择不同查询方式
 public class SearchFoodActivity extends AppCompatActivity {
     private List<FoodBean> mSearchList = new ArrayList<>();
     private List<FoodBean> mTemp = new ArrayList<>();

@@ -11,6 +11,7 @@ import java.util.List;
 import app.food.note.FoodBean;
 import app.food.note.R;
 
+//搜索出来的结果适配器
 public class SearchAdapter extends BaseQuickAdapter<FoodBean, BaseViewHolder> {
 
     public SearchAdapter(List<FoodBean> list) {

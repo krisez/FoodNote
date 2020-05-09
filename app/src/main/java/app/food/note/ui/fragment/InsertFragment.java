@@ -14,6 +14,7 @@ import app.food.note.R;
 import app.food.note.ui.activity.FoodDetailActivity;
 import app.food.note.ui.activity.SearchFoodActivity;
 
+//增加fragment，用于点击事件
 public class InsertFragment extends Fragment {
 
     @Nullable

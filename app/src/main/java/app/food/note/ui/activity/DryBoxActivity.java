@@ -23,6 +23,7 @@ import app.food.note.adapter.FoodAdapter;
 import app.food.note.db.RxDbManager;
 import io.reactivex.disposables.Disposable;
 
+//干货区页面
 public class DryBoxActivity extends AppCompatActivity {
     private FoodAdapter mAdapter;
     private List<FoodBean> mFoodBeanList = new ArrayList<>();

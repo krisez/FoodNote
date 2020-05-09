@@ -3,6 +3,7 @@ package app.food.note;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+//食物bean
 public class FoodBean implements Parcelable {
     public int id;
     public String name;
@@ -118,7 +119,7 @@ public class FoodBean implements Parcelable {
         String t = "";
         switch (type){
             case 0:
-                t = "冷冻收藏";
+                t = "冷冻冷藏";
                 break;
             case 1:
                 t = "粮油干货";
@@ -127,7 +128,7 @@ public class FoodBean implements Parcelable {
                 t = "肉类生鲜";
                 break;
             case 3:
-                t = "蔬菜";
+                t = "蔬菜水果";
                 break;
             case 4:
                 t = "调料酱料";

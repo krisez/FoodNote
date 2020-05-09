@@ -26,21 +26,23 @@ import app.food.note.Utils;
 import app.food.note.db.RxDbManager;
 import io.reactivex.disposables.Disposable;
 
+//所有的食物适配器
 public class FoodAdapter extends BaseQuickAdapter<FoodBean, BaseViewHolder> implements DraggableModule {
     private FoodBean mConsumeBean;
+
     public FoodAdapter(List<FoodBean> data, Context context) {
         super(R.layout.item_food, data);
 
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
-        paint.setTextSize(QMUIDisplayHelper.sp2px(context,24));
+        paint.setTextSize(QMUIDisplayHelper.sp2px(context, 24));
         paint.setAntiAlias(true);
+        //开启侧滑功能
         getDraggableModule().setSwipeEnabled(true);
         getDraggableModule().setOnItemSwipeListener(new OnItemSwipeListener() {
             @Override
             public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int pos) {
-                Log.d("FoodAdapter", "onItemSwipeStart:" + pos);
-                mConsumeBean = getData().get(pos);
+                mConsumeBean = getData().get(pos);//暂存避免删除错误
             }
 
             @Override
@@ -50,7 +52,8 @@ public class FoodAdapter extends BaseQuickAdapter<FoodBean, BaseViewHolder> impl
 
             @Override
             public void onItemSwiped(RecyclerView.ViewHolder viewHolder, int pos) {
-                if(mConsumeBean != null){
+                //删除后处理数据库
+                if (mConsumeBean != null) {
                     Disposable d = RxDbManager.getInstance().consumeFood(mConsumeBean).subscribe(consume -> {
                         Log.d("FoodAdapter", "食用:" + consume);
                     });
@@ -59,7 +62,6 @@ public class FoodAdapter extends BaseQuickAdapter<FoodBean, BaseViewHolder> impl
 
             @Override
             public void onItemSwipeMoving(Canvas canvas, RecyclerView.ViewHolder viewHolder, float dX, float dY, boolean isCurrentlyActive) {
-                Log.d("FoodAdapter", "onItemSwipeMoving:" + dX + " " + dY);
                 canvas.drawColor(Color.RED);
                 canvas.drawText("已食用/丢弃", 50, 100, paint);
             }
@@ -72,12 +74,12 @@ public class FoodAdapter extends BaseQuickAdapter<FoodBean, BaseViewHolder> impl
         baseViewHolder.setText(R.id.item_name, foodBean.name);
         String time = foodBean.createTime + "购买，保质期至" + foodBean.period.split("/")[0];
         baseViewHolder.setText(R.id.item_time, time);
-        if(foodBean.getLeftDays() <= 0){
+        if (foodBean.getLeftDays() <= 0) {
             baseViewHolder.setText(R.id.item_left_days, "已过期！");
-        }else{
+        } else {
             baseViewHolder.setText(R.id.item_left_days, "剩余" + foodBean.getLeftDays() + "天");
         }
-        if (Utils.willPeriod(foodBean.createTime, foodBean.period)) {
+        if (foodBean.getLeftDays() <= 3) {
             baseViewHolder.setTextColor(R.id.item_left_days, Color.RED);
         }
         Glide.with(getContext()).load(foodBean.photo).placeholder(R.mipmap.logo).into((ImageView) baseViewHolder.getView(R.id.item_photo));

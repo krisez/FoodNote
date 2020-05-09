@@ -27,6 +27,7 @@ import io.reactivex.disposables.Disposable;
 
 import static android.app.Activity.RESULT_OK;
 
+//冷藏、冷冻的页面
 public class PlaceholderFragment extends Fragment {
 
     private static final String ARG_SECTION_AREA = "section_area";
