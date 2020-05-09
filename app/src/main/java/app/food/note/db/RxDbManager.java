@@ -49,7 +49,7 @@ public class RxDbManager {
     //查询语句，分别查询干货、调料、常温食物
     public Observable<List<FoodBean>> query(String area) {
         return Observable.create((ObservableOnSubscribe<List<FoodBean>>) emitter -> {
-            Cursor cursor = db.query("select * from " + DBHelper.TABLE_NAME + " where area=\"" + area + "\" and consume=0 order by updateTime desc");
+            Cursor cursor = db.query("select * from " + DBHelper.TABLE_NAME + " where area=\"" + area + "\" and consume=0");
             List<FoodBean> list = new ArrayList<>();
             while (cursor.moveToNext()) {
                 int _id = cursor.getInt(cursor.getColumnIndex("_id"));
@@ -93,7 +93,7 @@ public class RxDbManager {
     //查询语句,查询搜索的时候能查到的食物
     public Observable<List<FoodBean>> querySearchType(int t) {
         return Observable.create((ObservableOnSubscribe<List<FoodBean>>) emitter -> {
-            Cursor cursor = db.query("select * from " + DBHelper.TABLE_NAME + " where type=" + t);
+            Cursor cursor = db.query("select * from " + DBHelper.TABLE_NAME + " where type=" + t + " group by name");
             List<FoodBean> list = new ArrayList<>();
             while (cursor.moveToNext()) {
                 int _id = cursor.getInt(cursor.getColumnIndex("_id"));
@@ -113,8 +113,8 @@ public class RxDbManager {
     }
 
     //清空数据库
-    public void clear(String tableName) {
-        db.execute("delete from " + tableName + ";");
+    public void clear(String tableName, int type) {
+        db.execute("delete from " + tableName + " where type=" + type + ";");
     }
 
     public Observable<Boolean> update(FoodBean bean) {
@@ -181,7 +181,7 @@ public class RxDbManager {
 
     public Observable<List<FoodBean>> querySearchHistory(int t) {
         return Observable.create((ObservableOnSubscribe<List<FoodBean>>) emitter -> {
-            Cursor cursor = db.query("select * from " + DBHelper.TABLE_NAME + " where _id in (select foodId from " + DBHelper.SEARCH_TABLE_NAME + " where type="+ t + ")");
+            Cursor cursor = db.query("select * from " + DBHelper.TABLE_NAME + " where _id in (select foodId from " + DBHelper.SEARCH_TABLE_NAME + " where type=" + t + ") group by name;");
             List<FoodBean> list = new ArrayList<>();
             while (cursor.moveToNext()) {
                 int _id = cursor.getInt(cursor.getColumnIndex("_id"));

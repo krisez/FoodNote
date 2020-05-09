@@ -136,7 +136,7 @@ public class FoodBean implements Parcelable {
         return t;
     }
 
-    public String getLeftDays(){
+    public int getLeftDays(){
         return Utils.getLeftDays(period.split("/")[0]);
     }
 }

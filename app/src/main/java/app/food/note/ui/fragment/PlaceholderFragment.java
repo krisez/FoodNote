@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import app.food.note.FoodBean;
 import app.food.note.R;
 import app.food.note.adapter.FoodAdapter;
@@ -54,8 +55,8 @@ public class PlaceholderFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = view.findViewById(R.id.rv_food);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        recyclerView.setAdapter(mAdapter = new FoodAdapter(mFoodBeanList));
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+        recyclerView.setAdapter(mAdapter = new FoodAdapter(mFoodBeanList, getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         mAdapter.setEmptyView(R.layout.empty_view);
         mAdapter.setOnItemClickListener((adapter, v, position) -> startActivityForResult(new Intent(getActivity(), FoodDetailActivity.class).putExtra("bean", mFoodBeanList.get(position)), 100));
         mRefreshLayout = view.findViewById(R.id.srl_refresh);

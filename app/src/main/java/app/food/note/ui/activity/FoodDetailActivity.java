@@ -85,9 +85,14 @@ public class FoodDetailActivity extends AppCompatActivity {
                 Glide.with(this).load(mFoodBean.photo).into(mPhoto);
             }
             photo = mFoodBean.photo;
-            mTvArea.setText(mFoodBean.area);
             mTvType.setText(mFoodBean.getType());
             beanType = mFoodBean.type;
+            zone = mFoodBean.zone;
+            String s = mFoodBean.area;
+            if (!zone.equals("")) {
+                s += "," + zone;
+            }
+            mTvArea.setText(s);
         } else {
             topBar.setTitle("新增");
         }
@@ -130,7 +135,7 @@ public class FoodDetailActivity extends AppCompatActivity {
                 Toast.makeText(this, "保质期为空!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (mTvArea.getText().toString().equals(getString(R.string.click_area))) {
+            if (mTvArea.getText().toString().isEmpty()) {
                 Toast.makeText(this, "区域为空!", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -187,7 +192,15 @@ public class FoodDetailActivity extends AppCompatActivity {
         findViewById(R.id.detail_period_iv).setOnClickListener(v -> {
             if (!topBar.getTitle().equals("修改")) {
                 Calendar calendar = Calendar.getInstance();
-                new DatePickerDialog(this, (view, year, month, dayOfMonth) -> mTvPeriod.setText(Utils.period(year, month, dayOfMonth)), calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE)).show();
+                new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+                    Calendar c = Calendar.getInstance();
+                    c.set(year,month,dayOfMonth);
+                    if (calendar.after(c)){
+                        Toast.makeText(this, "时间不能早于今日！", Toast.LENGTH_SHORT).show();
+                    }else{
+                        mTvPeriod.setText(Utils.period(year, month, dayOfMonth));
+                    }
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE)).show();
             } else {
                 Toast.makeText(this, "不支持修改~", Toast.LENGTH_SHORT).show();
             }

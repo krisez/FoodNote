@@ -45,7 +45,7 @@ public class Utils {
         return format.format(calendar.getTime()) + "/" + days + "天";
     }
 
-    static String getLeftDays(String endTime) {
+    static int getLeftDays(String endTime) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", new Locale("zh", "CN"));
         try {
             Date date = format.parse(endTime);
@@ -53,13 +53,12 @@ public class Utils {
             long now = calendar.getTimeInMillis();
             if (date != null) {
                 calendar.setTime(date);
-                int day = (int) ((calendar.getTimeInMillis() - now) / 1000 / 60 / 60 / 24);
-                return "" + day;
+                return (int) ((calendar.getTimeInMillis() - now) / 1000 / 60 / 60 / 24);
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return "0";
+        return 0;
     }
 
 }

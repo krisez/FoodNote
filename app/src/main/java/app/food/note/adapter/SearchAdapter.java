@@ -20,6 +20,6 @@ public class SearchAdapter extends BaseQuickAdapter<FoodBean, BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder baseViewHolder, FoodBean foodBean) {
         baseViewHolder.setText(R.id.item_name, foodBean.name);
-        Glide.with(getContext()).load(foodBean.photo).placeholder(R.mipmap.foodnote).into((ImageView) baseViewHolder.getView(R.id.item_photo));
+        Glide.with(getContext()).load(foodBean.photo).placeholder(R.mipmap.logo).into((ImageView) baseViewHolder.getView(R.id.item_photo));
     }
 }

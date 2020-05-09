@@ -46,7 +46,7 @@ public class PeriodFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.rv_period);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        mAdapter = new FoodAdapter(list);
+        mAdapter = new FoodAdapter(list,getContext());
         recyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener((a, v, position) -> {
             Intent intent = new Intent(getContext(), FoodDetailActivity.class);

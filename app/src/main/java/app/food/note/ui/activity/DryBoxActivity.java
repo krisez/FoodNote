@@ -39,7 +39,7 @@ public class DryBoxActivity extends AppCompatActivity {
         topBar.addLeftBackImageButton().setOnClickListener(v -> finish());
         RecyclerView recyclerView = findViewById(R.id.rv_food_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        recyclerView.setAdapter(mAdapter = new FoodAdapter(mFoodBeanList));
+        recyclerView.setAdapter(mAdapter = new FoodAdapter(mFoodBeanList,this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mAdapter.setEmptyView(R.layout.empty_view);
         mAdapter.setOnItemClickListener((adapter, v, position) -> startActivityForResult(new Intent(this, FoodDetailActivity.class).putExtra("bean", mFoodBeanList.get(position)), 100));
